@@ -11,6 +11,7 @@
 #include <unistd.h>
 #include <stdbool.h>
 #include <sys/wait.h>
+#include <sys/stat.h>
 /**
 * this will be my made functions
 */
@@ -18,7 +19,7 @@
 void cujo_prints(const char *string);
 size_t count_string(const char *str);
 void cujo_prompt(void);
-void exec_command(const char *command, char **args);
+void exec_command(const char *command, char *args[]);
 void reads_cmd(char *cmd, size_t size);
 char *find_executable(const char *path, const char *command);
 void tokenize_cmd(const char *cmd, char *args[]);

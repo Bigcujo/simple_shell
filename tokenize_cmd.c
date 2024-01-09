@@ -8,17 +8,18 @@
 
 void tokenize_cmd(const char *cmd, char **args)
 {
-	char *cmd_copy = malloc(strlen(cmd) + 1);
+	char *cmd_copy;
+	char *token;
+	int i = 0;
+	cmd_copy = malloc(strlen(cmd) + 1);
 	if (cmd_copy == NULL)
 	{
 		cujo_prints("Memory allocation error!\n");
 		return;
 	}
-	char *token;
 	strcpy(cmd_copy, cmd);
 
 	token = strtok(cmd_copy, "\t\n");
-	int i = 0;
 	while (token != NULL)
 	{
 		args[i++] = token;

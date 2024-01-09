@@ -1,39 +1,35 @@
 #include "shell.h"
 
-char *find_executable(const char *path, const char *command)
-{
-    char *token, *path_copy, *full_path;
-    size_t command_len = strlen(command);
+char *find_executable(const char *path, const char *command) {
+    struct stat file_stat;
+    char *path_copy = strdup(path);
+    char *dir;
+    char *result = NULL;
 
-    path_copy = strdup(path);
-    if (path_copy == NULL)
-    {
-        perror("strdup");
-        exit(EXIT_FAILURE);
+    if (path_copy == NULL) {
+        return NULL;
     }
 
-    token = strtok(path_copy, ":");
-    while (token != NULL)
-    {
-        full_path = malloc(strlen(token) + command_len + 2);
-        if (full_path == NULL)
-        {
-            perror("malloc");
-            exit(EXIT_FAILURE);
+    while ((dir = strsep(&path_copy, ":")) != NULL) {
+        size_t full_path_len = strlen(dir) + strlen(command) + 2;
+        char *full_path = malloc(full_path_len);
+
+        if (full_path == NULL) {
+            free(path_copy); 
+            return NULL;
         }
 
-        sprintf(full_path, "%s/%s", token, command);
+        printf("Trying path: %s\n", full_path);
 
-        if (access(full_path, X_OK) == 0)
-        {
-            free(path_copy);
-            return full_path;
+        if (stat(full_path, &file_stat) == 0 && S_ISREG(file_stat.st_mode) && file_stat.st_mode & S_IXUSR) {
+            result = full_path;
+            break;
         }
 
-        free(full_path);
-        token = strtok(NULL, ":");
+        free(full_path);  
     }
 
-    free(path_copy);
-    return NULL;
+    free(path_copy); 
+    return result;
 }
+
