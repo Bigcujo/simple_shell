@@ -6,15 +6,19 @@
 *@args: An array to store the resulting arguments.
 */
 
-void tokenize_cmd(const char *cmd, char *args[])
+void tokenize_cmd(const char *cmd, char **args)
 {
-	char cmd_copy[strlen(cmd) + 1];
-
+	char *cmd_copy = malloc(strlen(cmd) + 1);
+	if (cmd_copy == NULL)
+	{
+		cujo_prints("Memory allocation error!\n");
+		return;
+	}
+	char *token;
 	strcpy(cmd_copy, cmd);
 
-	char *token = strtok(cmd_copy, "\t\n");
+	token = strtok(cmd_copy, "\t\n");
 	int i = 0;
-
 	while (token != NULL)
 	{
 		args[i++] = token;
@@ -22,4 +26,5 @@ void tokenize_cmd(const char *cmd, char *args[])
 	}
 	args[i] = NULL;
 
-}
+	free(cmd_copy);
+	}

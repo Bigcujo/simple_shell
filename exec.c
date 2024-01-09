@@ -5,9 +5,10 @@
 *@args: this takes the arguments to be used with the command
 */
 
-void exec_command(const char *command, char *const args[])
+void exec_command(const char *command, char **args)
 {
 pid_t child = fork();
+
 if (child == -1)
 {
 	perror("fork");
@@ -15,9 +16,18 @@ if (child == -1)
 }
 else if (child == 0)
 {
-	execve(command, args, (char *const)NULL);
-	perror("execve");
-	exit(EXIT_FAILURE);
+	char *path = getenv("PATH");
+	char *full_path = find_executable(path, command);
+
+	if (full_path != NULL)
+	{
+		execve(full_path, args, NULL);
+	}
+	else
+	{
+		perror("execve");
+		exit(EXIT_FAILURE);
+	}
 }
 else
 {

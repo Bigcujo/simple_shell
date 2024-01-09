@@ -7,7 +7,7 @@
 
 void reads_cmd(char *cmd, size_t size)
 {
-	if (fgets(cmd, size, stdin) == NULL)
+	if (fgets(cmd, size - 1, stdin) == NULL)
 	{
 	if (feof(stdin))
 	{
