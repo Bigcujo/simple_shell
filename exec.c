@@ -7,30 +7,36 @@
 
 void exec_command(const char *command, char **args)
 {
-pid_t child = fork();
+	pid_t child = fork();
 
-if (child == -1)
-{
+	if (child == -1)
+	{
 	perror("fork");
 	exit(EXIT_FAILURE);
-}
-else if (child == 0)
-{
+	}
+	else if (child == 0)
+	{
 	char *path = getenv("PATH");
+
 	char *full_path = find_executable(path, command);
 
 	if (full_path != NULL)
 	{
-		execve(full_path, args, NULL);
+	printf("Found executable at path: %s\n", full_path);
+	execve(full_path, args, NULL);
+	perror("execve");
+	exit(EXIT_FAILURE);
 	}
 	else
 	{
-		perror("execve");
-		exit(EXIT_FAILURE);
+	printf("Warning: Returned path from find_executable is NULL.\n");
+	exit(EXIT_FAILURE);
 	}
-}
-else
-{
+	}
+	else
+	{
 	wait(NULL);
-}
+	}
+
+
 }

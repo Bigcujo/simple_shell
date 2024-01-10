@@ -1,28 +1,33 @@
 #include "shell.h"
 /**
-*main - this is the main function of the shell scriipt
+* main - this is the main function of the shell scriipt
 *Return: this will return 0
 */
 
 int main(void)
 {
-    char cmd[MAX_CMD_SIZE];
-	int i;
-    while (1)
-    {
-        char *args[MAX_ARGS];
-        cujo_prompt();
-        reads_cmd(cmd, sizeof(cmd));
+	char cmd[MAX_CMD_SIZE];
 
-        tokenize_cmd(cmd, args);
-        exec_command(args[0], args);
+	while (1)
+	{
+	char **args = (char **)calloc(MAX_ARGS, sizeof(char *));
 
-       
-        for (i = 0; args[i] != NULL; i++)
-        {
-            free(args[i]);
-        }
-    }
+	if (args == NULL)
+	{
+	cujo_prints("Memory allocation error!\n");
+	break;
+	}
 
-    return 0;
+	cujo_prompt();
+
+	reads_cmd(cmd, sizeof(cmd));
+
+	tokenize_cmd(cmd, args);
+
+	exec_command(args[0], args);
+
+	free(args);
+	}
+
+	return (0);
 }
