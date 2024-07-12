@@ -14,7 +14,12 @@
 #include <stdarg.h>
 #include <limits.h>
 #include <signal.h>
+#define BUFFER_SIZE 1024
+
+extern char **environ;
+
 
 void display_prompt(void);
 void read_cmd(char *buffer);
 void execute_cmd(char *command);
+#endif

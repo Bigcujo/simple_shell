@@ -1,53 +1,9 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-
-#define BUFFER_SIZE 1024
-
-extern char **environ;
-
-void display_prompt(void)
-{
-	printf("#cisfun$ ");
-}
-
-void read_cmd(char *buffer)
-{
-
-	if (fgets(buffer, BUFFER_SIZE, stdin) == NULL)
-	{
-		if (feof(stdin))
-		{
-			printf("\n");
-			exit(0);
-		}
-		else
-		{
-			perror("fgets");
-			exit(1);
-		}
-	}
-}
-
-void execute_cmd(char *cmd)
-{
-	char *argv[2];
-	argv[0] = cmd;
-	argv[1] = NULL;
-
-	if (execve(cmd, argv, environ) == -1)
-	{
-		perror(cmd);
-	}
-}
-
+#include "shell.h"
 int main(void)
 {
 	char buffer[BUFFER_SIZE];
 	char *cmd;
+	pid_t pid;
 	while (1)
 	{
 		display_prompt();
@@ -60,7 +16,7 @@ int main(void)
 			continue;
 		}
 
-		pid_t pid = fork();
+		pid = fork();
 		if (pid == -1)
 		{
 			perror("fork");
