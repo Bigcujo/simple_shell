@@ -1,6 +1,8 @@
 #include "shell.h"
-
-void display_prompt(void) 
+/**
+ * display_prompt - prompt to display.
+ */
+void display_prompt(void)
 {
-    printf("#cisfun$ ");
+	printf("#cisfun$ ");
 }
