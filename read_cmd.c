@@ -5,18 +5,24 @@
  */
 void read_cmd(char *buffer)
 {
+	size_t len = strlen(buffer);
 	if (fgets(buffer, BUFFER_SIZE, stdin) == NULL)
 	{
-	if (feof(stdin))
-	{
-	printf("\n");
-	exit(0);
+		if (feof(stdin))
+		{
+			printf("\n");
+			exit(0);
+		}
+		else
+		{
+			perror("fgets");
+			exit(1);
+		}
 	}
-	else
+
+	if (len > 0 && buffer[len - 1] == '\n')
 	{
-	perror("fgets");
-	exit(1);
-	}
+		buffer[len - 1] = '\0';
 	}
 }
 
